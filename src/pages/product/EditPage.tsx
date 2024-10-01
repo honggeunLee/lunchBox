@@ -1,9 +1,12 @@
-import BasicLayout from "../../layout/BasicLayout.tsx";
+import EditComponent from "../../components/product/EditComponent.tsx";
 
 function EditPage() {
-    <BasicLayout>
-        <div>Edit Page</div>
-    </BasicLayout>
+    return (
+        <div>
+            <h1>Edit Product</h1>
+            <EditComponent />
+        </div>
+    );
 }
 
 export default EditPage;
