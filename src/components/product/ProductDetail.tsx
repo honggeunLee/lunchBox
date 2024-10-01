@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getDetail } from '../api/productAPI';
-import { IProduct } from '../types/product';  // IProduct 타입 import
-import LoadingComponent from '../components/LoadingComponent'; // 로딩 컴포넌트
+import { getDetail } from '../../api/productAPI.ts';
+import { IProduct } from '../../types/product.ts';  // IProduct 타입 import
+import LoadingComponent from '../LoadingComponent.tsx'; // 로딩 컴포넌트
 
 const initialState: IProduct = {
     pno: 0,
