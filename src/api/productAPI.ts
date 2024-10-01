@@ -26,3 +26,10 @@ export const deleteOne = async (pno: number): Promise<{ result: string }> => {
 
     return res.data;
 };
+
+export const getProductList = async (page:number = 1, size:number = 10) => {
+
+    const res = await axios.get(`${host}/list?page=${page}&size=${size}`)
+
+    return res.data
+}

@@ -11,7 +11,8 @@ const initialState: IProduct = {
     img: [],
     regDate: '',
     modDate: '',
-    writer: ''
+    writer: '',
+    uploadFileNames: []
 };
 
 function RegisterComponent() {
