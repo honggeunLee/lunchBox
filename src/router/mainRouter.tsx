@@ -5,7 +5,7 @@ import productRouter from "./productRouter.tsx";
 
 const MainPage = lazy(() => import("../pages/MainPage"))
 
-const Loading = <LoadingPage></LoadingPage>
+const Loading = <LoadingPage/>
 
 const mainRouter = createBrowserRouter([
     {

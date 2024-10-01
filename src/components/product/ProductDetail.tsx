@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getDetail } from '../../api/productAPI.ts';
-import { IProduct } from '../../types/product.ts';  // IProduct 타입 import
-import LoadingComponent from '../LoadingComponent.tsx'; // 로딩 컴포넌트
+import { useNavigate, useParams } from 'react-router-dom';
+import { getDetail } from '../../api/productAPI';
+import { IProduct } from '../../types/product';
+import LoadingComponent from '../LoadingComponent.tsx';
 
 const initialState: IProduct = {
     pno: 0,
@@ -21,9 +21,24 @@ const ProductDetail = () => {
     const { pno } = useParams<{ pno: string }>(); // URL 파라미터에서 제품 번호 받기
     const [product, setProduct] = useState<IProduct>(initialState);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const queryString = window.location.search;  // `location.search` 대신 `window.location.search`
+
+    const moveToList = (): void => {
+        navigate({
+            pathname: '/product/list',
+            search: queryString,
+        });
+    };
+
+    const moveToEdit = (): void => {
+        pno && navigate({
+            pathname: `/product/edit/${pno}`,
+            search: queryString,
+        });
+    };
 
     useEffect(() => {
-        console.log(pno);
         const fetchProduct = async () => {
             try {
                 const data = await getDetail(Number(pno));  // API 호출하여 제품 정보 가져오기
@@ -38,20 +53,20 @@ const ProductDetail = () => {
         fetchProduct();
     }, [pno]);
 
-    if (loading) {
-        return <LoadingComponent />;  // 로딩 컴포넌트 표시
-    }
 
 
     return (
         <div className="flex flex-col space-y-6 w-96 mx-auto bg-white shadow-lg p-6 rounded-lg">
             <h2 className="text-2xl font-bold text-center text-blue-500 mb-4">Product Details</h2>
+
+            {loading && <LoadingComponent/>}
             {/* 제품 번호 */}
             <div className="flex flex-col space-y-2">
                 <label className="text-sm font-semibold text-gray-700">제품 번호</label>
                 <input
                     type="text"
-                    value={product.pno}
+                    name="pno"
+                    value={product.pno || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -62,7 +77,8 @@ const ProductDetail = () => {
                 <label className="text-sm font-semibold text-gray-700">제품 이름</label>
                 <input
                     type="text"
-                    value={product.pname}
+                    name="pname"
+                    value={product.pname || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -72,7 +88,8 @@ const ProductDetail = () => {
             <div className="flex flex-col space-y-2">
                 <label className="text-sm font-semibold text-gray-700">제품 설명</label>
                 <textarea
-                    value={product.pdesc}
+                    name="pdesc"
+                    value={product.pdesc || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -83,7 +100,8 @@ const ProductDetail = () => {
                 <label className="text-sm font-semibold text-gray-700">가격</label>
                 <input
                     type="number"
-                    value={product.price}
+                    name="price"
+                    value={product.price !== null && product.price !== undefined ? product.price : ''}  // 빈 값으로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -92,27 +110,29 @@ const ProductDetail = () => {
             {/* 제품 이미지 */}
             <div className="flex flex-col space-y-2">
                 <label className="text-sm font-semibold text-gray-700">이미지</label>
-                {product.uploadFileNames && product.uploadFileNames.length > 0 && (
+                {product.uploadFileNames && product.uploadFileNames.length > 0 ? (
                     <div className="flex space-x-4">
                         {product.uploadFileNames.map((fileName, index) => (
                             <img
                                 key={index}
-                                src={`http://localhost:8089/api/products/view/${fileName}`}  // 서버 경로와 파일 이름을 결합
-                                alt={product.pname}
+                                src={`http://localhost:8089/api/products/view/${fileName}`}
+                                alt={product.pname || '이미지'}  // 빈 문자열로 처리
                                 className="w-32 h-32 object-cover"
                             />
                         ))}
                     </div>
+                ) : (
+                    <p className="text-sm text-gray-500">등록된 이미지가 없습니다.</p>
                 )}
             </div>
-
 
             {/* 작성자 */}
             <div className="flex flex-col space-y-2">
                 <label className="text-sm font-semibold text-gray-700">작성자</label>
                 <input
                     type="text"
-                    value={product.writer}
+                    name="writer"
+                    value={product.writer || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -123,7 +143,8 @@ const ProductDetail = () => {
                 <label className="text-sm font-semibold text-gray-700">등록일</label>
                 <input
                     type="text"
-                    value={product.regDate}
+                    name="regDate"
+                    value={product.regDate || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -134,10 +155,27 @@ const ProductDetail = () => {
                 <label className="text-sm font-semibold text-gray-700">수정일</label>
                 <input
                     type="text"
-                    value={product.modDate}
+                    name="modDate"
+                    value={product.modDate || ''}  // 빈 문자열로 처리
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
+            </div>
+
+            {/* 수정 및 목록으로 버튼 */}
+            <div className="flex space-x-4 mt-4">
+                <button
+                    onClick={moveToEdit}
+                    className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+                >
+                    수정/삭제
+                </button>
+                <button
+                    onClick={moveToList}
+                    className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-200"
+                >
+                    목록으로
+                </button>
             </div>
         </div>
     );
