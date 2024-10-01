@@ -1,4 +1,4 @@
-import ProductDetail from "../../components/ProductDetail.tsx";
+import ProductDetail from "../../components/product/ProductDetail.tsx";
 
 function DetailPage() {
     return (
