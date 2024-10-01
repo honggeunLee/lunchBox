@@ -14,7 +14,7 @@ const initialState: IProduct = {
     regDate: '',
     modDate: '',
     writer: '',
-    uploadFileNames: []
+    uploadFileNames: []  // 추가된 필드
 };
 
 const ProductDetail = () => {
@@ -42,9 +42,6 @@ const ProductDetail = () => {
         return <LoadingComponent />;  // 로딩 컴포넌트 표시
     }
 
-    if (!product) {
-        return <div>Product not found</div>;
-    }
 
     return (
         <div className="flex flex-col space-y-6 w-96 mx-auto bg-white shadow-lg p-6 rounded-lg">
