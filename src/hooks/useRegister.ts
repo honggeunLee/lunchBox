@@ -1,13 +1,13 @@
 import { useState } from "react";
-import {postOne} from "../api/productAPI.ts";
+import { postOne } from "../api/productAPI.ts";
 
 function useRegister() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleAddProduct = (formData: FormData) => {
+    const handleAddProduct = (formData: FormData): Promise<void> => {
         setIsLoading(true);
-        postOne(formData)
+        return postOne(formData)
             .then(res => {
                 console.log("Product added:", res);
             })
