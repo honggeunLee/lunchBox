@@ -1,6 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { IProduct } from "../../types/product.ts";
 import useRegister from "../../hooks/useRegister.ts";
+import {useNavigate} from "react-router-dom";
 
 const initialState: IProduct = {
     pno: 0,
@@ -20,6 +21,7 @@ function RegisterComponent() {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const filesRef = useRef<HTMLInputElement>(null);
     const { isLoading, handleAddProduct } = useRegister();
+    const navigate = useNavigate();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct({
@@ -49,6 +51,7 @@ function RegisterComponent() {
         formData.append("price", String(product.price));
 
         handleAddProduct(formData);
+        navigate("/product");
     };
 
     return (
