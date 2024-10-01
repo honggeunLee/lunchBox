@@ -10,3 +10,21 @@ export interface IProduct {
     writer:string;
     uploadFileNames: string[];  // 추가된 필드
 }
+
+export interface IPageRequestDTO {
+    page: number;
+    size: number;
+}
+
+export interface IPageResponse {
+    dtoList: IProduct[];
+    pageNumList: number[];
+    pageRequestDTO: IPageRequestDTO;
+    prev: boolean;
+    next: boolean;
+    totalCount: number;
+    prevPage: number;
+    nextPage: number;
+    totalPage: number;
+    current: number;
+}

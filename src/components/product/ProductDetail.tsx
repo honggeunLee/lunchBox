@@ -13,7 +13,8 @@ const initialState: IProduct = {
     img: [],
     regDate: '',
     modDate: '',
-    writer: ''
+    writer: '',
+    uploadFileNames: []
 };
 
 const ProductDetail = () => {
@@ -99,7 +100,7 @@ const ProductDetail = () => {
                         {product.uploadFileNames.map((fileName, index) => (
                             <img
                                 key={index}
-                                src={`http://localhost:8089/images/${fileName}`}  // 서버 경로와 파일 이름을 결합
+                                src={`http://localhost:8089/api/products/view/${fileName}`}  // 서버 경로와 파일 이름을 결합
                                 alt={product.pname}
                                 className="w-32 h-32 object-cover"
                             />

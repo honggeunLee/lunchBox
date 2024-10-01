@@ -48,22 +48,22 @@ function BasicLayout({ children }: { children: React.ReactNode }) {
                 <aside className="w-64 bg-gray-800 text-white fixed h-full shadow-lg">
                     <nav className="flex flex-col p-4">
                         <Link
-                            to="/admin/dashboard"
+                            to="/"
                             className="py-2 px-4 hover:bg-gray-700 rounded mb-2"
                         >
                             대시보드
                         </Link>
                         <Link
-                            to="/admin/products"
+                            to="/product"
                             className="py-2 px-4 hover:bg-gray-700 rounded mb-2"
                         >
                             상품 관리
                         </Link>
                         <Link
-                            to="/admin/orders"
+                            to="/product/register"
                             className="py-2 px-4 hover:bg-gray-700 rounded mb-2"
                         >
-                            주문 관리
+                            상품 추가
                         </Link>
                         <Link
                             to="/admin/users"
