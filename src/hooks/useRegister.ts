@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {postAdd} from "../api/productAPI.ts";
+import {postOne} from "../api/productAPI.ts";
 
 function useRegister() {
     const [isLoading, setIsLoading] = useState(false);
@@ -7,7 +7,7 @@ function useRegister() {
 
     const handleAddProduct = (formData: FormData) => {
         setIsLoading(true);
-        postAdd(formData)
+        postOne(formData)
             .then(res => {
                 console.log("Product added:", res);
             })

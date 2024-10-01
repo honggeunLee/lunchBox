@@ -9,8 +9,20 @@ export const getDetail = async (pno: number) : Promise<IProduct>  => {
     return res.data;
 };
 
-export const postAdd = async (formData: FormData): Promise<number> => {
+export const postOne = async (formData: FormData): Promise<number> => {
     const res = await axios.post(`${host}/`, formData);
 
     return Number(res.data.result);
-}
+};
+
+export const putOne = async (product: IProduct): Promise<IProduct> => {
+    const res = await axios.put(`${host}/${product.pno}`, product);
+
+    return res.data;
+};
+
+export const deleteOne = async (pno: number): Promise<{ result: string }> => {
+    const res = await axios.delete(`${host}/${pno}`);
+
+    return res.data;
+};
