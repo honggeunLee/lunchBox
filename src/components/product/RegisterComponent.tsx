@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import { IProduct } from "../../types/product.ts";
 import useRegister from "../../hooks/useRegister.ts";
 
-const initialState = {
+const initialState: IProduct = {
     pno: 0,
     delFlag: false,
     pdesc: '',
@@ -11,10 +11,10 @@ const initialState = {
     img: [],
     regDate: '',
     modDate: '',
-    writer: '',
-}
+    writer: ''
+};
 
-function ProductAddComponent() {
+function RegisterComponent() {
     const [product, setProduct] = useState<IProduct>({ ...initialState });
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const filesRef = useRef<HTMLInputElement>(null);
@@ -126,4 +126,4 @@ function ProductAddComponent() {
     );
 }
 
-export default ProductAddComponent;
+export default RegisterComponent;
