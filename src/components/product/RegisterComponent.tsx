@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { IProduct } from "../../types/product.ts";
+import { useNavigate } from "react-router-dom";
 import useRegister from "../../hooks/useRegister.ts";
-import {useNavigate} from "react-router-dom";
 
 const initialState: IProduct = {
     pno: 0,
@@ -50,8 +50,10 @@ function RegisterComponent() {
         formData.append("pdesc", product.pdesc);
         formData.append("price", String(product.price));
 
-        handleAddProduct(formData);
-        navigate("/product");
+        handleAddProduct(formData).then(() => {
+            // 제품 등록 성공 후 리스트 페이지로 이동
+            navigate("/product");
+        });
     };
 
     return (
