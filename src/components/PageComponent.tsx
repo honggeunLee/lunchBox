@@ -1,4 +1,3 @@
-
 import { ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
 import {IPageResponse} from "../types/product.ts";

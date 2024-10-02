@@ -49,7 +49,7 @@ const useList = () => {
 
     // 조회 페이지 이동
     const moveToRead = (pno: number) => {
-        navigate(`/product/detail/${pno}`);
+        navigate(`/product/detail/${pno}?page=${page}`);
     };
 
 
