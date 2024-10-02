@@ -11,8 +11,6 @@ function ListComponent() {
 
     const listLI = pageResponse.dtoList.map((product: IProduct) => {
 
-        console.log(product);
-
         const {pno, pname, pdesc, price, uploadFileNames} = product
 
         // 이미지 경로 생성
