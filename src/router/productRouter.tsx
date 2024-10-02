@@ -1,13 +1,13 @@
 import {lazy, Suspense} from "react";
 import LoadingPage from "../pages/LoadingPage.tsx";
-import RegisterPage from "../pages/product/RegisterPage.tsx";
-import EditPage from "../pages/product/EditPage.tsx";
 import {Navigate} from "react-router-dom";
 
 const Loading = <LoadingPage/>
 const ProductIndex = lazy(() => import("../pages/product/IndexPage"))
 const ProductList = lazy(() => import("../pages/product/ListPage"))
 const ProductDetail = lazy(() => import("../pages/product/DetailPage"))
+const ProductEdit = lazy(() => import("../pages/product/EditPage"))
+const ProductRegister = lazy(() => import("../pages/product/RegisterPage"))
 
 const productRouter = {
     path:'/product',
@@ -23,7 +23,7 @@ const productRouter = {
         },
         {
             path: "register",
-            element: <Suspense fallback={Loading}><RegisterPage /></Suspense>,
+            element: <Suspense fallback={Loading}><ProductRegister/></Suspense>,
         },
         {
             path: "detail/:pno",
@@ -31,7 +31,7 @@ const productRouter = {
         },
         {
             path: "edit/:pno",
-            element: <Suspense fallback={Loading}><EditPage /></Suspense>
+            element: <Suspense fallback={Loading}><ProductEdit/></Suspense>
         },
     ]
 }

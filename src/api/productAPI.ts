@@ -15,8 +15,24 @@ export const postOne = async (formData: FormData): Promise<number> => {
     return Number(res.data.result);
 };
 
-export const putOne = async (product: IProduct): Promise<IProduct> => {
-    const res = await axios.put(`${host}/${product.pno}`, product);
+export const putOne = async (product: IProduct, files: File[]): Promise<IProduct> => {
+    const formData = new FormData();
+
+    formData.append("pno", product.pno.toString());
+    formData.append("pname", product.pname);
+    formData.append("pdesc", product.pdesc);
+    formData.append("price", product.price.toString());
+    formData.append("delFlag", product.delFlag.toString());
+
+    files.forEach((file) => {
+        formData.append("files", file);
+    });
+
+    const res = await axios.put(`${host}/${product.pno}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
 
     return res.data;
 };
