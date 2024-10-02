@@ -2,6 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import { IProduct } from "../../types/product.ts";
 import { useNavigate } from "react-router-dom";
 import useRegister from "../../hooks/useRegister.ts";
+import ResultModal from "../ResultModal.tsx";
 
 const initialState: IProduct = {
     pno: 0,
@@ -19,6 +20,7 @@ const initialState: IProduct = {
 function RegisterComponent() {
     const [product, setProduct] = useState<IProduct>({ ...initialState });
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const filesRef = useRef<HTMLInputElement>(null);
     const { isLoading, handleAddProduct } = useRegister();
     const navigate = useNavigate();
@@ -41,10 +43,14 @@ function RegisterComponent() {
         const files = filesRef.current?.files;
         const formData = new FormData();
 
-        if (files) {
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i]);
-            }
+        if (!files || files.length === 0) {
+            // 이미지가 선택되지 않으면 모달을 보여줌
+            setIsModalOpen(true);
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
         }
         formData.append("pname", product.pname);
         formData.append("pdesc", product.pdesc);
@@ -128,6 +134,13 @@ function RegisterComponent() {
             >
                 {isLoading ? '추가 중...' : '추가'}
             </button>
+
+            {isModalOpen && (
+                <ResultModal
+                    msg="이미지를 선택해야 합니다."
+                    callback={() => setIsModalOpen(false)}
+                />
+            )}
         </div>
     );
 }
