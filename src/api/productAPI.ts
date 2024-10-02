@@ -37,7 +37,9 @@ export const putOne = async (product: IProduct, files: File[]): Promise<IProduct
     return res.data;
 };
 
-export const deleteOne = async (pno: number): Promise<{ result: string }> => {
+export const deleteOne = async (pno: number): Promise<{
+    RESULT: string;
+    result: string }> => {
     const res = await axios.delete(`${host}/${pno}`);
 
     return res.data;

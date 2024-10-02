@@ -63,13 +63,19 @@ function EditComponent() {
         setLoading(true);
         deleteOne(Number(pno))
             .then((data) => {
-                if (data.result === "success") {
+                console.log("Delete Response:", data); // 서버 응답 데이터를 확인
+
+                // 서버 응답 데이터에 맞는 조건을 설정 (대문자 "SUCCESS"로 비교)
+                if (data.RESULT === "SUCCESS") {
                     setResult(`${pno} 삭제 되었습니다.`);
+                } else {
+                    setResult("삭제 중 오류가 발생했습니다.");
                 }
                 setLoading(false);
             })
             .catch((error) => {
                 console.error("Error during deletion:", error);
+                setResult("삭제 중 오류가 발생했습니다.");
                 setLoading(false);
             });
     };
