@@ -25,6 +25,7 @@ function EditComponent() {
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [result, setResult] = useState<string>(""); // 결과 메시지
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 선택된 파일 저장
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const queryString = window.location.search;
 
@@ -95,6 +96,12 @@ function EditComponent() {
 
     // 제품 수정 핸들러
     const handleClickModify = () => {
+
+        if (selectedFiles.length === 0) {
+            setIsModalOpen(true); // 이미지가 선택되지 않았을 때 모달 띄우기
+            return;
+        }
+
         setLoading(true);
 
         // 파일과 함께 제품 정보 전송
@@ -219,6 +226,13 @@ function EditComponent() {
                     삭제
                 </button>
             </div>
+
+            {isModalOpen && (
+                <ResultModal
+                    msg="이미지를 선택해야 합니다."
+                    callback={() => setIsModalOpen(false)}
+                />
+            )}
         </div>
     );
 }
