@@ -14,6 +14,7 @@ const initialState: IProduct = {
     regDate: '',
     modDate: '',
     writer: '',
+    keyword: '',
     uploadFileNames: []
 };
 
@@ -55,6 +56,7 @@ function RegisterComponent() {
         formData.append("pname", product.pname);
         formData.append("pdesc", product.pdesc);
         formData.append("price", String(product.price));
+        formData.append("keyword", product.keyword);
 
         handleAddProduct(formData).then(() => {
             // 제품 등록 성공 후 리스트 페이지로 이동
@@ -92,6 +94,15 @@ function RegisterComponent() {
                     onChange={handleChange}
                 />
             </div>
+            <div className="mb-4">
+                <input
+                    type="text"
+                    name="keyword"
+                    placeholder="키워드"
+                    className="w-full p-2 border border-gray-300 rounded"
+                    onChange={handleChange}
+                />
+            </div>
             <div className="mb-6">
                 <label
                     htmlFor="file-upload"
@@ -121,7 +132,9 @@ function RegisterComponent() {
                                     alt={`preview-${index}`}
                                     className="w-full h-32 object-cover rounded"
                                 />
-                                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded px-1 py-0.5">X</div>
+                                <div
+                                    className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded px-1 py-0.5">X
+                                </div>
                             </div>
                         ))}
                     </div>

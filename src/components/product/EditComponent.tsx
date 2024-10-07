@@ -16,6 +16,7 @@ const initialState: IProduct = {
     regDate: "",
     modDate: "",
     writer: "",
+    keyword: "",
     uploadFileNames: [],
 };
 
@@ -181,6 +182,18 @@ function EditComponent() {
                     type="number"
                     name="price"
                     value={product.price !== null && product.price !== undefined ? product.price : ""}
+                    className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
+                    onChange={handleChange}
+                />
+            </div>
+
+            {/* 제품 키워드 */}
+            <div className="flex flex-col space-y-2">
+                <label className="text-sm font-semibold text-gray-700">키워드</label>
+                <input
+                    type="text"
+                    name="keyword"
+                    value={product.keyword || ""}
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                     onChange={handleChange}
                 />

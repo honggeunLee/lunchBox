@@ -14,6 +14,7 @@ const initialState: IProduct = {
     regDate: '',
     modDate: '',
     writer: '',
+    keyword: '',
     uploadFileNames: []  // 추가된 필드
 };
 
@@ -115,7 +116,7 @@ const ProductDetail = () => {
                         {product.uploadFileNames.map((fileName, index) => (
                             <img
                                 key={index}
-                                src={`http://localhost:8089/api/products/view/${fileName}`}
+                                src={`http://localhost:8091/api/products/view/${fileName}`}
                                 alt={product.pname || '이미지'}  // 빈 문자열로 처리
                                 className="w-32 h-32 object-cover"
                             />
