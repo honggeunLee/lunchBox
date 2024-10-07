@@ -3,11 +3,12 @@ import {IProduct} from "../../types/product.ts";
 import LoadingComponent from "../LoadingComponent.tsx";
 import PageComponent from "../PageComponent.tsx";
 import useList from "../../hooks/useList.ts";
+import {Link} from "react-router-dom";
 
 function ListComponent() {
 
-    const {loading, pageResponse, moveToRead, handleSearch,
-        setSearchType, setKeyword, searchType, keyword} = useList()
+    const {loading, pageResponse, moveToRead,
+        handleSearch, setKeyword, keyword} = useList()
 
     const listLI = pageResponse.dtoList.map((product: IProduct) => {
 
@@ -15,7 +16,7 @@ function ListComponent() {
 
         // 이미지 경로 생성
         const thumbnailUrl = uploadFileNames.length > 0
-            ? `http://localhost:8089/api/products/view/s_${uploadFileNames[0]}`
+            ? `http://localhost:8091/api/products/view/s_${uploadFileNames[0]}`
             : null;
 
         return (
@@ -43,26 +44,17 @@ function ListComponent() {
             {loading && <LoadingComponent/>}
             <div className="flex justify-end mb-6">
                 <div className="flex space-x-4">
-                    <select
-                        className="px-4 py-2 border border-gray-300 rounded-md"
-                        value={searchType}
-                        onChange={(e) => setSearchType(e.target.value)}
-                    >
-                        <option value="">---</option>
-                        <option value="T">제목</option>
-                        <option value="C">내용</option>
-                        <option value="W">작성자</option>
-                        <option value="TC">제목혹은내용</option>
-                        <option value="TW">제목혹은작성자</option>
-                        <option value="TCW">제목혹은내용혹은작성자</option>
-                    </select>
-
                     <input
                         type="text"
                         className="px-4 py-2 border border-gray-300 rounded-md"
                         placeholder="검색어 입력"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSearch();  // 엔터 키를 누르면 handleSearch 호출
+                            }
+                        }}
                     />
 
                     <button
@@ -71,6 +63,13 @@ function ListComponent() {
                     >
                         검색
                     </button>
+                    <Link to="/product">
+                        <button
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        >
+                            초기화
+                        </button>
+                    </Link>
                 </div>
             </div>
 

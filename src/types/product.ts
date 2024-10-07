@@ -8,12 +8,14 @@ export interface IProduct {
     regDate: string;
     modDate: string;
     writer:string;
+    keyword:string;
     uploadFileNames: string[];  // 추가된 필드
 }
 
 export interface IPageRequestDTO {
     page: number;
     size: number;
+    keyword?: string;
 }
 
 export interface IPageResponse {

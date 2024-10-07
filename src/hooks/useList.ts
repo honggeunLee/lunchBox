@@ -1,14 +1,15 @@
-import {IPageResponse} from "../types/product.ts";
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getProductList} from "../api/productAPI.ts";
+import {IPageResponse} from "../types/product.ts";
 
 const initialState: IPageResponse = {
     dtoList: [],
     pageNumList: [],
     pageRequestDTO: {
         page: 1,
-        size: 10
+        size: 10,
+        keyword: ""  // 검색어 초기값 추가
     },
     prev: false,
     next: false,
@@ -29,32 +30,31 @@ const useList = () => {
     const location = useLocation()
     const navigate = useNavigate();
 
-    const [searchType, setSearchType] = useState(query.get("type") || "");
     const [keyword, setKeyword] = useState(query.get("keyword") || "");
 
     useEffect(() => {
-        setLoading(true)
-        getProductList(page, size).then(data => {
-            setPageResponse(data)
-            setLoading(false)
-        })
-    }, [query, location.key])
+        setLoading(true);
+        // 검색 조건 포함하여 API 호출
+        getProductList(page, size, keyword).then(data => {
+            setPageResponse(data);
+            setLoading(false);
+        });
+    }, [query, location.key]);
 
-    // 검색 화면 추가
+    // 검색 실행 함수
     const handleSearch = () => {
-        query.set("type", searchType);
         query.set("keyword", keyword);
         setQuery(query);
     };
 
     // 조회 페이지 이동
     const moveToRead = (pno: number) => {
-        navigate(`/product/detail/${pno}?page=${page}`);
+        const query = `page=${page}` + (keyword ? `&keyword=${keyword}` : "");
+        navigate(`/product/detail/${pno}?${query}`);
     };
 
-
-    return {loading, pageResponse, handleSearch, moveToRead,
-        setSearchType, setKeyword, searchType, keyword}
+    return {loading, pageResponse, handleSearch,
+        moveToRead, setKeyword, keyword}
 }
 
 export default useList;
