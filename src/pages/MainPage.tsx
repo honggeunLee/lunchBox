@@ -7,7 +7,6 @@ function MainPage() {
     return (
         <BasicLayout>
             <div>Main Page</div>
-
         </BasicLayout>
     );
 }
