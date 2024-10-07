@@ -5,24 +5,21 @@ import { deleteOne, getDetail, putOne } from "../../api/productAPI.ts";
 import LoadingComponent from "../LoadingComponent.tsx";
 import ResultModal from "../ResultModal.tsx";
 
-// 초기 상태 설정
-const initialState: IProduct = {
+const initialProductState: IProduct = {
     pno: 0,
     delFlag: false,
-    pdesc: "",
-    pname: "",
+    pdesc: '',
+    pname: '',
     price: 0,
     img: [],
-    regDate: "",
-    modDate: "",
-    writer: "",
-    keyword: "",
-    uploadFileNames: [],
+    regDate: '',
+    modDate: '',
+    writer: '',
+    uploadFileNames: []  // 추가된 필드
 };
-
 function EditComponent() {
     const { pno } = useParams<{ pno: string }>(); // URL 파라미터에서 제품 번호 받아옴
-    const [product, setProduct] = useState<IProduct>(initialState); // 제품 상태 관리
+    const [product, setProduct] = useState<IProduct>(initialProductState);
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [result, setResult] = useState<string>(""); // 결과 메시지
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // 새로 선택된 파일 저장
@@ -67,7 +64,6 @@ function EditComponent() {
             .then((data) => {
                 console.log("Delete Response:", data); // 서버 응답 데이터를 확인
 
-                // 서버 응답 데이터에 맞는 조건을 설정 (대문자 "SUCCESS"로 비교)
                 if (data.RESULT === "SUCCESS") {
                     setResult(`${pno} 삭제 되었습니다.`);
                 } else {
@@ -95,9 +91,17 @@ function EditComponent() {
         }
     };
 
+    // 입력 필드 변경 핸들러
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: value,
+        }));
+    };
+
     // 제품 수정 핸들러
     const handleClickModify = () => {
-
         if (selectedFiles.length === 0) {
             setIsModalOpen(true); // 이미지가 선택되지 않았을 때 모달 띄우기
             return;
@@ -105,11 +109,25 @@ function EditComponent() {
 
         setLoading(true);
 
-        // 파일과 함께 제품 정보 전송
+        const formData = new FormData();
+        formData.append("pno", product.pno.toString());
+        formData.append("pname", product.pname);
+        formData.append("pdesc", product.pdesc);
+        formData.append("price", product.price.toString());
+        formData.append("delFlag", product.delFlag.toString());
+
+        if (selectedFiles.length > 0) {
+            formData.append("uploadFileNames", selectedFiles[0].name);
+        }
+
+        selectedFiles.forEach((file) => {
+            formData.append("files", file);
+        });
+
         putOne(product, selectedFiles)
             .then((modifyResult) => {
                 setResult(`${pno} 수정되었습니다.`);
-                setProduct(modifyResult); // 수정된 제품 정보를 상태에 반영
+                setProduct(modifyResult);
                 setLoading(false);
             })
             .catch((error) => {
@@ -118,24 +136,15 @@ function EditComponent() {
             });
     };
 
-    // 입력 필드 변경 핸들러 (제품명, 설명, 가격 등)
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setProduct({
-            ...product,
-            [name]: value,
-        });
-    };
-
     // 파일 선택 핸들러
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setSelectedFiles(Array.from(e.target.files)); // 새로운 파일 상태에 저장
+            setSelectedFiles(Array.from(e.target.files));
         }
     };
 
     return (
-        <div className="flex flex-col space-y-6 w-96 mx-auto bg-white shadow-lg p-6 rounded-lg">
+        <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto bg-white shadow-lg p-6 rounded-lg">
             <h2 className="text-2xl font-bold text-center text-blue-500 mb-4">Product Edit</h2>
             {loading && <LoadingComponent />}
             {result && <ResultModal msg={result} callback={closeCallback} />}
@@ -187,18 +196,6 @@ function EditComponent() {
                 />
             </div>
 
-            {/* 제품 키워드 */}
-            <div className="flex flex-col space-y-2">
-                <label className="text-sm font-semibold text-gray-700">키워드</label>
-                <input
-                    type="text"
-                    name="keyword"
-                    value={product.keyword || ""}
-                    className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
-                    onChange={handleChange}
-                />
-            </div>
-
             {/* 이미지 업로드 */}
             <label className="text-sm font-semibold text-gray-700">이미지 업로드</label>
             <input
@@ -210,10 +207,15 @@ function EditComponent() {
             />
 
             {/* 기존 이미지 및 선택된 이미지 표시 */}
-            {selectedFiles.length > 0 && (
+            {product.uploadFileNames && product.uploadFileNames.length > 0 && (
                 <div className="flex space-x-4">
-                    {selectedFiles.map((file, index) => (
-                        <img key={index} src={URL.createObjectURL(file)} alt="선택된 이미지" className="w-32 h-32 object-cover" />
+                    {product.uploadFileNames.map((file, index) => (
+                        <img
+                            key={index}
+                            src={`http://localhost:8089/api/products/view/${file}`}
+                            alt="선택된 이미지"
+                            className="w-32 h-32 object-cover"
+                        />
                     ))}
                 </div>
             )}

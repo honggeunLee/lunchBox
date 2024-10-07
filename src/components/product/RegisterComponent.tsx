@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useRegister from "../../hooks/useRegister.ts";
 import ResultModal from "../ResultModal.tsx";
 
-const initialState: IProduct = {
+const initialProductState: IProduct = {
     pno: 0,
     delFlag: false,
     pdesc: '',
@@ -14,12 +14,11 @@ const initialState: IProduct = {
     regDate: '',
     modDate: '',
     writer: '',
-    keyword: '',
-    uploadFileNames: []
+    uploadFileNames: []  // 추가된 필드
 };
 
 function RegisterComponent() {
-    const [product, setProduct] = useState<IProduct>({ ...initialState });
+    const [product, setProduct] = useState<IProduct>(initialProductState);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const filesRef = useRef<HTMLInputElement>(null);
@@ -45,9 +44,12 @@ function RegisterComponent() {
         const formData = new FormData();
 
         if (!files || files.length === 0) {
-            // 이미지가 선택되지 않으면 모달을 보여줌
             setIsModalOpen(true);
             return;
+        }
+
+        if (files.length > 0) {
+            formData.append('uploadFileNames', files[0].name);
         }
 
         for (let i = 0; i < files.length; i++) {
@@ -56,16 +58,14 @@ function RegisterComponent() {
         formData.append("pname", product.pname);
         formData.append("pdesc", product.pdesc);
         formData.append("price", String(product.price));
-        formData.append("keyword", product.keyword);
 
         handleAddProduct(formData).then(() => {
-            // 제품 등록 성공 후 리스트 페이지로 이동
             navigate("/product");
         });
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
             <h1 className="text-2xl font-bold text-center mb-6">도시락 추가하기</h1>
             <div className="mb-4">
                 <input
@@ -94,15 +94,6 @@ function RegisterComponent() {
                     onChange={handleChange}
                 />
             </div>
-            <div className="mb-4">
-                <input
-                    type="text"
-                    name="keyword"
-                    placeholder="키워드"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    onChange={handleChange}
-                />
-            </div>
             <div className="mb-6">
                 <label
                     htmlFor="file-upload"
@@ -124,7 +115,7 @@ function RegisterComponent() {
             {selectedFiles.length > 0 && (
                 <div className="mb-4">
                     <h2 className="text-lg font-semibold mb-2">선택한 사진</h2>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
                         {selectedFiles.map((file, index) => (
                             <div key={index} className="relative">
                                 <img
@@ -132,8 +123,8 @@ function RegisterComponent() {
                                     alt={`preview-${index}`}
                                     className="w-full h-32 object-cover rounded"
                                 />
-                                <div
-                                    className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded px-1 py-0.5">X
+                                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded px-1 py-0.5 cursor-pointer">
+                                    X
                                 </div>
                             </div>
                         ))}
