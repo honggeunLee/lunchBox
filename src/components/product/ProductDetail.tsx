@@ -4,7 +4,7 @@ import { getDetail } from '../../api/productAPI';
 import { IProduct } from '../../types/product';
 import LoadingComponent from '../LoadingComponent.tsx';
 
-const initialState: IProduct = {
+const initialProductState: IProduct = {
     pno: 0,
     delFlag: false,
     pdesc: '',
@@ -19,7 +19,7 @@ const initialState: IProduct = {
 
 const ProductDetail = () => {
     const { pno } = useParams<{ pno: string }>(); // URL 파라미터에서 제품 번호 받기
-    const [product, setProduct] = useState<IProduct>(initialState);
+    const [product, setProduct] = useState<IProduct>(initialProductState);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const queryString = window.location.search;  // `location.search` 대신 `window.location.search`
@@ -53,10 +53,8 @@ const ProductDetail = () => {
         fetchProduct();
     }, [pno]);
 
-
-
     return (
-        <div className="flex flex-col space-y-6 w-96 mx-auto bg-white shadow-lg p-6 rounded-lg">
+        <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto bg-white shadow-lg p-6 rounded-lg">
             <h2 className="text-2xl font-bold text-center text-blue-500 mb-4">Product Details</h2>
 
             {loading && <LoadingComponent/>}
@@ -66,7 +64,7 @@ const ProductDetail = () => {
                 <input
                     type="text"
                     name="pno"
-                    value={product.pno || ''}  // 빈 문자열로 처리
+                    value={product.pno || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -78,7 +76,7 @@ const ProductDetail = () => {
                 <input
                     type="text"
                     name="pname"
-                    value={product.pname || ''}  // 빈 문자열로 처리
+                    value={product.pname || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -89,7 +87,7 @@ const ProductDetail = () => {
                 <label className="text-sm font-semibold text-gray-700">제품 설명</label>
                 <textarea
                     name="pdesc"
-                    value={product.pdesc || ''}  // 빈 문자열로 처리
+                    value={product.pdesc || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -101,30 +99,27 @@ const ProductDetail = () => {
                 <input
                     type="number"
                     name="price"
-                    value={product.price !== null && product.price !== undefined ? product.price : ''}  // 빈 값으로 처리
+                    value={product.price !== null && product.price !== undefined ? product.price : ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
             </div>
 
             {/* 제품 이미지 */}
-            <div className="flex flex-col space-y-2">
-                <label className="text-sm font-semibold text-gray-700">이미지</label>
-                {product.uploadFileNames && product.uploadFileNames.length > 0 ? (
-                    <div className="flex space-x-4">
-                        {product.uploadFileNames.map((fileName, index) => (
-                            <img
-                                key={index}
-                                src={`http://localhost:8089/api/products/view/${fileName}`}
-                                alt={product.pname || '이미지'}  // 빈 문자열로 처리
-                                className="w-32 h-32 object-cover"
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-sm text-gray-500">등록된 이미지가 없습니다.</p>
-                )}
-            </div>
+            {product.uploadFileNames && product.uploadFileNames.length > 0 ? (
+                <div className="flex space-x-4">
+                    {product.uploadFileNames.map((fileName, index) => (
+                        <img
+                            key={index}
+                            src={`http://localhost:8089/api/products/view/${fileName}`}
+                            alt={product.pname || '이미지'}
+                            className="w-32 h-32 object-cover"
+                        />
+                    ))}
+                </div>
+            ) : (
+                <p className="text-sm text-gray-500">등록된 이미지가 없습니다.</p>
+            )}
 
             {/* 작성자 */}
             <div className="flex flex-col space-y-2">
@@ -132,7 +127,7 @@ const ProductDetail = () => {
                 <input
                     type="text"
                     name="writer"
-                    value={product.writer || ''}  // 빈 문자열로 처리
+                    value={product.writer || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -144,7 +139,7 @@ const ProductDetail = () => {
                 <input
                     type="text"
                     name="regDate"
-                    value={product.regDate || ''}  // 빈 문자열로 처리
+                    value={product.regDate || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
@@ -156,7 +151,7 @@ const ProductDetail = () => {
                 <input
                     type="text"
                     name="modDate"
-                    value={product.modDate || ''}  // 빈 문자열로 처리
+                    value={product.modDate || ''}
                     readOnly
                     className="border border-gray-300 rounded-lg p-3 bg-gray-100 text-gray-700"
                 />
